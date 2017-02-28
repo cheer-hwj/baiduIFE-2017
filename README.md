@@ -1,2 +1,2 @@
 # my-baiduIFE
-2017 baiduIFE
+百度前端技术学院
