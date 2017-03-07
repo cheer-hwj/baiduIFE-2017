@@ -332,4 +332,13 @@ footer{
 	height:				61px;
 	width:				100%;
 	border-top:			#938e8c solid 1px;
+	position:			relative;
+}
+.top{
+	position:			absolute;
+	top:				2px;
+	right:				0px;
+	font-size:			12px;
+	color:				#d45d5c;
+	font-family:		"黑体";
 }
