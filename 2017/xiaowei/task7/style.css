@@ -442,7 +442,7 @@ li.login:active {
     text-align: center;
 }
 .submission:hover {
-    background-color:#e7504d;
+    background-color: #e7504d;
 }
 /*联系我们*/
 .contact {
@@ -488,4 +488,15 @@ footer {
 	font-size: 12px;   
     font-family: "SimSun";
     background-color: #303039;
+}
+footer a{
+    margin-right: 20px;
+    float: right;
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #fff;
+}
+footer a:hover{
+    color: #e7504d;
 }
