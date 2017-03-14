@@ -31,10 +31,12 @@
 				return b[1] - a[1];
 			});
 			(function () {
-				var ul = document.getElementById("aqi-list");
-				ul.innerHTML = '';
+				var ol = document.getElementById("aqi-list");
+				ol.innerHTML = '';
 				for(var i = 0; i < list.length; i++){
-					ul.innerHTML += "<li>" + list[i][0] + "，" + list[i][1] + "</li>"
+					var li = document.createElement("li");
+					li.innerHTML = list[i];
+					ol.appendChild(li);
 				}
 
 			})();
