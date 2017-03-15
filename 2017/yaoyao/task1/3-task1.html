@@ -49,8 +49,9 @@
 	</head>
 	<body>
 		<form name="myForm" onsubmit="return validateForm()" method="post" id="myform">
-		名称: <input type="text" name="fname" class="input" id="input">
-			  <input type="submit" value="验证" class="btn">
+		<label for="fname">名称:</label> 
+		<input type="text" name="fname" class="input" id="input">
+			  <button type="submit" class="btn">验证</button> 
 			  <p id="tip" class="tip">必填，长度为4到16个字符</P>
 		</form>
 		<script>
