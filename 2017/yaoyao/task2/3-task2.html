@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>3-task2</title>
+		<style>
+			* {
+				padding: 0;
+				margin: 0;
+			}
+			form {
+			    position: absolute;
+				top: 0;
+				bottom: 0;
+				left: 0;
+				right: 0;
+				margin: auto;				
+			    width: 600px;
+			    height: 500px;
+			}
+			.input {
+			    margin: 10px;
+				padding: 0 20px;
+			    width: 300px;
+				height: 40px;
+				border: #aaf solid 1px;
+				border-radius: 5px;
+			}
+			.btn {
+			    margin: 10px;
+			    height: 40px;
+				width: 80px;
+				color: #fff;
+				background-color: #55d;
+				border: none;
+				border-radius: 5px;
+			}
+			.btn:hover {
+			    background-color: #33a;
+			}
+			.tip {
+				font-size: 12px;
+				color: #555;
+				text-indent: 20px;
+			}
+			.tableRow{
+			    display: table-row;
+			}
+			.tableRow div:first-child {
+			    text-align: right;
+			}
+			.tableCell{
+			    display: table-cell;
+			}
+			.tableRow:last-child {
+			    text-align: right;
+			}
+		</style>
+	</head>
+	<body>
+		<form name="myForm" onsubmit="return validateForm()" method="post" id="myform">
+		<div class="tableRow">
+			<div class="tableCell">
+				<label for="username" >名称:</label> 
+			</div>
+			<div class="tableCell inputfname">
+				<input type="text" name="username" class="input" id="username" placeholder="必填">
+			</div>
+		</div>
+		<div class="tableRow">
+			<div class="tableCell">
+				<label for="userpw">密码:</label>
+			</div>
+			<div class="tableCell">				
+				<input type="password" name="userpw" class="input" id="userpw" placeholder="必填">
+			</div>
+		</div>
+		<div class="tableRow">
+			<div class="tableCell">
+				<label for="pwconfirm">密码确认:</label>
+			</div>
+			<div class="tableCell">		
+				<input type="password" name="pwconfirm" class="input" id="pwconfirm">
+			</div>
+		</div>
+		<div class="tableRow">
+			<div class="tableCell">
+				<label for="useremail">邮箱:</label> 
+			</div>
+			<div class="tableCell">	
+				<input type="mail" name="useremail" class="input" id="useremail">
+			</div>
+		</div>
+		<div class="tableRow">
+			<div class="tableCell">
+				<label for="usertel">手机:</label> 
+			</div>
+			<div class="tableCell">	
+				<input type="text" name="usertel" class="input" id="usertel">
+			</div>
+		</div>
+		<div class="tableRow" colspan="2">
+			<div class="tableCell">
+			</div>
+			<div class="tableCell">	
+				<button type="submit" class="btn">验证</button> 
+			</div>
+			
+		</div>
+		
+		</form>
+		<script>
+			/**
+			*验证是否为空
+			**/
+			function isEmpty(elem){
+				if(elem.value == null || elem.value == ""){
+					return true;
+				}else return false;
+				
+			}
+			/**
+			*验证格式
+			**/
+			function validateInput(elementid,elem,tip){
+				var n = 0;
+				var val = elem.value;
+				
+				if(elementid == "username"){
+					if(isEmpty(elem)) {
+						n = 2;
+					}
+					else if(getRealLen(val) > 16 || getRealLen(val) < 4){
+						n = 1;
+					}else {
+						n = 3;
+					}
+				}
+				if(elementid == "userpw"){
+					if(isEmpty(elem)) {
+						n = 2;
+					}
+					else if(getRealLen(val) > 20 || getRealLen(val) < 6){
+						n = 1;
+					}else {
+						n = 3;
+					}
+				}
+				if(elementid == "pwconfirm"){
+					var userpw = document.getElementById("userpw");
+					if(!isEmpty(elem)) {
+						if(userpw.value != ""){
+							if(isEmpty(elem)) {
+								n = 2;
+							}
+							else if(val !== userpw.value){
+								n = 1;
+							}else {
+								n = 3;
+							}
+						}else userpw.focus();
+					}
+				}
+				if(elementid == "useremail"){
+					if(!isEmpty(elem)) {	
+						var myreg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+						if(!myreg.test(val)){
+							n = 1;
+						}else n = 3;
+					}else return true;
+				}
+				if(elementid == "usertel"){
+					if(!isEmpty(elem)) {
+						var myreg = /^((13[0-9]{1})|159|153)+\d{8}$/;
+						if(!myreg.test(val)){
+							n = 1;
+						}else n = 3;
+					}else return true;
+				}
+				if(n == 1 || n == 2){
+					tip.style.color = "#d44";
+					elem.style.borderColor = "#d44";
+				}
+				if(n == 3){
+					tip.style.color = "#4a4";
+					elem.style.borderColor = "#4a4";
+				}
+				tip.innerHTML = diffTips(elementid,n);
+				return n == 3;
+			}
+			/**
+			*中文字符长度的计算
+			**/
+			function getRealLen(str) {  
+				return str.replace(/[^\x00-\xff]/g, '__').length;  
+			}
+			
+			/**
+			*放到节点之后
+			**/
+			function insertAfter(newElement,targetElement){
+				var parent = targetElement.parentNode;
+				if(parent.lastChild == targetElement){
+					parent.appendChild(newElement);
+				}else{
+					parent.insertBefore(newElement,targetElement.nextSibling);
+				}
+			}
+			
+			/**
+			*各种提示
+			**/
+			function diffTips(elementid,n){
+				var tip_content = "";
+				var error_content = "";
+				var empty_content = "";
+				var correct_content = "";
+
+				switch(elementid){				
+					case "username": tip_content = "长度为4到16个字符";
+					error_content = "名称格式错误";
+					empty_content = "名称不能为空";
+					correct_content = "名称可用";
+					break;
+					case "userpw": tip_content = "英文和字母结合，长度为6到20个字符";
+					error_content = "密码长度出错";
+					empty_content = "密码不能为空";
+					correct_content = "密码可用";
+					break;
+					case "pwconfirm": tip_content = "再次输入相同密码";
+					error_content = "密码输入有误";
+					empty_content = "请再次输入相同密码";
+					correct_content = "密码一致";
+					break;
+					case "useremail": tip_content = "邮箱地址";
+					error_content = "邮箱格式错误";
+					correct_content = "邮箱可用";
+					break;
+					case "usertel": tip_content = "11位手机号码";
+					error_content = "手机号码格式错误";
+					correct_content = "手机号码可用";
+					break;
+					default: return false;
+				}
+				//0为默认提示，1为错误提示，2为内容为空提示，3为正确提示
+				var arr = [tip_content,error_content,empty_content,correct_content];
+				return arr[n];	
+			}
+			
+			/**
+			*获得焦点时产生文本，离开时验证
+			**/	
+			function getTips(elementid) {
+				if(!document.getElementById) return false;
+				var elem = document.getElementById(elementid);
+				if(elem.parentNode.lastChild != elem){
+					elem.parentNode.removeChild(elem.parentNode.lastChild);
+				}
+				var tip = document.createElement("p");
+				var tip_content = document.createTextNode(diffTips(elementid,0));
+				tip.appendChild(tip_content);
+				tip.className = "tip";
+				
+				elem.onfocus = function(){
+					tip.style = "";
+					elem.style = "";
+					tip.firstChild.nodeValue = diffTips(elementid,0);
+					insertAfter(tip,elem);
+				};
+				elem.onblur = function(){
+					validateInput(elementid,elem,tip);
+				};					
+			}
+			
+			window.onload = function (){
+				getTips("username");
+				getTips("userpw");
+				getTips("pwconfirm");
+				getTips("useremail");
+				getTips("usertel");
+			};
+			
+			/**
+			*提交时验证信息
+			**/
+			function validate(elementid){
+				if(!document.getElementById) return false;
+				var elem = document.getElementById(elementid);
+				if(elem.parentNode.lastChild != elem){
+					elem.parentNode.removeChild(elem.parentNode.lastChild);
+				}
+				var tip = document.createElement("p");
+				var tip_content = document.createTextNode("");
+				tip.appendChild(tip_content);
+				tip.className = "tip";
+				insertAfter(tip,elem);
+				validateInput(elementid,elem,tip);
+				return validateInput(elementid,elem,tip);
+			}
+					
+			function validateForm(){
+				validate("username");
+				validate("userpw");
+				validate("pwconfirm");
+				validate("useremail");
+				validate("usertel");
+				if(	validate("username") && validate("userpw") && validate("pwconfirm") &&
+					validate("useremail") && validate("usertel")){
+						alert("提交成功！")
+					}else{
+						alert("提交失败！")
+					}
+			}
+		</script>
+	</body>
+</html>
+
