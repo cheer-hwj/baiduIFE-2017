@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>3-task3</title>
+		<meta charset="utf-8">
+		<style>
+			*{
+			    padding: 0;
+				margin: 0;
+			}
+			.main{
+			    padding: 200px;
+				text-align: center;
+			}
+			.input {
+			    display: inline;
+			    margin: 80px;
+				padding: 10px;
+			    font: 21px "Microsoft YaHei";
+			}
+			#forschool,
+			#forwork {
+			    margin: 50px;
+			}
+			.selection select {
+			    margin: 30px;
+			    width: 240px;
+			    height: 35px;
+			}
+			.selection select:first-child {
+			    width: 150px;
+			}
+			.textinput{
+			    margin: 20px;
+				text-indent: 10px;
+			    width: 300px;
+			    height: 35px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="main">
+			<div class="input">
+				<input type="radio" name="type" id="inschool" value="inschool" checked="checked">
+				<label for="inschool">在校生</label>
+			</div>
+			<div class="input">
+				<input type="radio" name="type" id="notinschool" value="notinschool">
+				<label for="notinschool">非在校生</label>
+			</div>
+			<div class="selection" id="forschool">
+				<select id="city">
+				</select>
+				<select id="school">
+				</select>
+			</div>
+			<div id="forwork">
+				<label for="workplace">就业单位</label>
+				<input type="text" id="workplace" class="textinput">
+			</div>
+			
+		<script>
+			function getRadio(radioname){
+				var types = document.getElementsByName(radioname);
+				var val;
+				for(var i = 0; i < types.length; i++){
+					if(types[i].checked){
+						val = types[i].value;
+					}
+					types[i].onclick = schoolOrWork;
+				}
+				return val;
+			}
+			function schoolOrWork(){
+				var forschool = document.getElementById("forschool");
+				var forwork = document.getElementById("forwork");
+				var val = getRadio("type");
+				if(val == "inschool"){
+					forschool.style.display = "block";
+					forwork.style.display = "none";
+				}else{
+					forschool.style.display = "none";
+					forwork.style.display = "block";
+				}
+			}
+			function writeCities(){
+				var citiesArr = [["beijing","北京"],["tianjin","天津"],["nanjing","南京"]];
+				var cities = document.getElementById("city");
+				while(cities.firstChild){
+					cities.removeChild(cities.firstChild);
+				}
+				for(var i = 0; i < citiesArr.length; i++){
+					var city = document.createElement("option");
+					var city_text = document.createTextNode(citiesArr[i][1]);
+					city.setAttribute("id",citiesArr[i][0]);
+					city.setAttribute("value",citiesArr[i][0]);
+					city.appendChild(city_text);
+					cities.appendChild(city);
+				}	
+			}
+			function writeSchools(cityid){
+				var schoolsArr = [];
+				schoolsArr["beijing"] = ["清华大学","北京大学","北京航空航天大学","对外经贸大学","北京师范大学"];
+				schoolsArr["tianjin"] = ["南开大学","天津大学","天津理工大学"];
+				schoolsArr["nanjing"] = ["东南大学","南京大学","南京航空航天大学","南京理工大学","南京邮电大学"];
+				
+				var schools = document.getElementById("school");
+				while(schools.firstChild){
+					schools.removeChild(schools.firstChild);
+				}
+				for(var i = 0; i < schoolsArr[cityid].length; i++){
+					var school = document.createElement("option");
+					var school_text = document.createTextNode(schoolsArr[cityid][i]);
+					school.appendChild(school_text);
+					schools.appendChild(school);
+				}	
+			}
+			function selectCity(){
+				writeCities();
+				writeSchools("beijing");
+				var selection = document.getElementById("city");
+				for(var i = 0; i < selection.childNodes.length; i++){
+				selection.childNodes[i].onclick = function(){
+						writeSchools(selection.value);
+					};
+				}	
+			}
+			window.onload = function(){
+				schoolOrWork();
+				selectCity();
+			};	
+		</script>
+		</div>
+	</body>
+</html>
