@@ -9,26 +9,26 @@
 				margin: 0;
 			}
 			form {
-			    position: absolute;
+				position: absolute;
 				top: 0;
 				bottom: 0;
 				left: 0;
 				right: 0;
 				margin: auto;				
-			    width: 600px;
-			    height: 500px;
+			 	width: 600px;
+				height: 500px;
 			}
 			.input {
-			    margin: 10px;
+				margin: 10px;
 				padding: 0 20px;
-			    width: 300px;
+			    	width: 300px;
 				height: 40px;
 				border: #aaf solid 1px;
 				border-radius: 5px;
 			}
 			.btn {
-			    margin: 10px;
-			    height: 40px;
+			    	margin: 10px;
+			   	height: 40px;
 				width: 80px;
 				color: #fff;
 				background-color: #55d;
@@ -36,7 +36,7 @@
 				border-radius: 5px;
 			}
 			.btn:hover {
-			    background-color: #33a;
+				background-color: #33a;
 			}
 			.tip {
 				font-size: 12px;
@@ -44,16 +44,16 @@
 				text-indent: 20px;
 			}
 			.tableRow{
-			    display: table-row;
+				display: table-row;
 			}
 			.tableRow div:first-child {
-			    text-align: right;
+				text-align: right;
 			}
 			.tableCell{
-			    display: table-cell;
+				display: table-cell;
 			}
 			.tableRow:last-child {
-			    text-align: right;
+				text-align: right;
 			}
 		</style>
 	</head>
@@ -253,7 +253,7 @@
 			function getTips(elementid) {
 				if(!document.getElementById) return false;
 				var elem = document.getElementById(elementid);
-				if(elem.parentNode.lastChild != elem){
+				while(elem.parentNode.lastChild != elem){
 					elem.parentNode.removeChild(elem.parentNode.lastChild);
 				}
 				var tip = document.createElement("p");
@@ -286,7 +286,7 @@
 			function validate(elementid){
 				if(!document.getElementById) return false;
 				var elem = document.getElementById(elementid);
-				if(elem.parentNode.lastChild != elem){
+				while(elem.parentNode.lastChild != elem){
 					elem.parentNode.removeChild(elem.parentNode.lastChild);
 				}
 				var tip = document.createElement("p");
