@@ -253,9 +253,7 @@
 			function getTips(elementid) {
 				if(!document.getElementById) return false;
 				var elem = document.getElementById(elementid);
-				while(elem.parentNode.lastChild != elem){
-					elem.parentNode.removeChild(elem.parentNode.lastChild);
-				}
+				
 				var tip = document.createElement("p");
 				var tip_content = document.createTextNode(diffTips(elementid,0));
 				tip.appendChild(tip_content);
@@ -265,6 +263,9 @@
 					tip.style = "";
 					elem.style = "";
 					tip.firstChild.nodeValue = diffTips(elementid,0);
+					while(elem.parentNode.lastChild != elem){
+					elem.parentNode.removeChild(elem.parentNode.lastChild);
+				}
 					insertAfter(tip,elem);
 				};
 				elem.onblur = function(){
