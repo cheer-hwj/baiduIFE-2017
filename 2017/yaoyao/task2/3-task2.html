@@ -307,9 +307,10 @@
 				if(	validate("username") && validate("userpw") && validate("pwconfirm") &&
 					validate("useremail") && validate("usertel")){
 						alert("提交成功！")
-					}else{
+				}else{
 						alert("提交失败！")
-					}
+				}
+				return false;
 			}
 		</script>
 	</body>
