@@ -78,11 +78,12 @@
 					var newone_text = document.createTextNode(arr[i]);
 					newone.appendChild(newone_text);
 					newone.className = "box";
+					newone.setAttribute("id",i);
 					display.appendChild(newone);
 					
 					newone.onclick = function(){
 						display.removeChild(this);
-						arr.splice(i,1);
+						arr.splice(this.id,1);
 					}
 				}
 			}
