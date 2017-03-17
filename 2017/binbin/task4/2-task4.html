@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>2-task4</title>
+		<meta charset="utf-8">
+		<style>
+			* {
+			    margin: 0;
+				padding: 0;
+			}
+			.main {
+			    margin: 200px;
+			    text-align: left;
+			}
+			.main input {
+			    width: 100px;
+				height: 40px;
+				text-indent: 10px;
+			}
+			button {
+			    margin: 0 10px;
+			    padding: 5px 15px;
+			    border: none;
+			    color: #fff;
+				background-color: #4aa;
+				border-radius: 5px;
+			}
+			button:hover {
+			    background-color: #488;
+			}
+			.in,
+			.out {
+			    display: inline-block;
+				margin: 20px;
+			}
+			.box {
+			    display: inline-block;
+				margin: 5px;
+			    width: 50px;
+				height: 50px;
+			    text-align: center;
+				line-height: 50px;
+				background-color: #d88;
+				color: #fff;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="main">
+			<input type="text" id="input">
+			<div class="in">
+				<button id="leftIn">左侧入</button>
+				<button id="rightIn">右侧入</button>
+			</div>
+			<div class="out">
+				<button id="leftOut">左侧出</button>
+				<button id="rightOut">右侧出</button>
+			</div>
+			<div id="display">	
+			</div>
+		</div>
+		<script>
+			var arr = [];
+			function createBox(arr){
+				var display = document.getElementById("display");
+				while(display.firstChild){
+					display.removeChild(display.firstChild);
+				}
+				for(var i = 0; i < arr.length; i++){
+					var newone = document.createElement("p");
+					var newone_text = document.createTextNode(arr[i]);
+					newone.appendChild(newone_text);
+					newone.className = "box";
+					newone.setAttribute("id",i);
+					display.appendChild(newone);	
+				}
+			}
+			
+			function mainfunc(btnid){
+				var btn = document.getElementById(btnid);
+				var input = document.getElementById("input");
+				
+				btn.onclick = function(){
+					switch(btnid){
+						case "leftIn": 
+						if(!/^(\d)+$/.test(input.value)){
+							alert("请输入数字");
+							return false;
+						}else arr.unshift(input.value);
+						break;
+						
+						case "rightIn": 
+						if(!/^(\d)+$/.test(input.value)){
+							alert("请输入数字");
+							return false;
+						}else arr.push(input.value);
+						break;
+						
+						case "leftOut": 
+						if(arr.length == 0){
+							alert("队列为空");
+							return false;
+						}else arr.shift();
+						break;
+						
+						case "rightOut": 
+						if(arr.length == 0){
+							alert("队列为空");
+							return false;
+						}else arr.pop();
+						break;
+						default: return false;
+						
+					}
+					createBox(arr);
+				}	
+			}
+			function del(){
+				var display = document.getElementById("display");
+				display.onmouseover = function(){
+					var boxes = display.getElementsByTagName("p");
+					for(var i = 0; i < arr.length; i++){
+						boxes[i].onclick = function(){
+						var n = this.id;
+						arr.splice(n,1);
+						createBox(arr);
+						}
+					}
+					return false;
+				}
+			}
+			window.onload = function(){
+				mainfunc("leftIn");
+				mainfunc("rightIn");
+				mainfunc("leftOut");
+				mainfunc("rightOut");
+				del();
+			}				
+		</script>
+	</body>
+</html>
