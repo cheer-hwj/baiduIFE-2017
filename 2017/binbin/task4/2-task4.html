@@ -78,8 +78,12 @@
 					var newone_text = document.createTextNode(arr[i]);
 					newone.appendChild(newone_text);
 					newone.className = "box";
-					newone.setAttribute("id",i);
-					display.appendChild(newone);	
+					display.appendChild(newone);
+					
+					newone.onclick = function(){
+						display.removeChild(this);
+						arr.splice(i,1);
+					}
 				}
 			}
 			
@@ -116,32 +120,16 @@
 							return false;
 						}else arr.pop();
 						break;
-						default: return false;
-						
+						default: return false;	
 					}
 					createBox(arr);
 				}	
-			}
-			function del(){
-				var display = document.getElementById("display");
-				display.onmouseover = function(){
-					var boxes = display.getElementsByTagName("p");
-					for(var i = 0; i < arr.length; i++){
-						boxes[i].onclick = function(){
-						var n = this.id;
-						arr.splice(n,1);
-						createBox(arr);
-						}
-					}
-					return false;
-				}
 			}
 			window.onload = function(){
 				mainfunc("leftIn");
 				mainfunc("rightIn");
 				mainfunc("leftOut");
 				mainfunc("rightOut");
-				del();
 			}				
 		</script>
 	</body>
