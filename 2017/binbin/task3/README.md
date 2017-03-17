@@ -1,11 +1,11 @@
-#task3： 零基础JavaScript编码（三）
-###任务目的
+# task3： 零基础JavaScript编码（三）
+### 任务目的
 + 在上一任务基础上继续JavaScript的体验
 + 接触一下JavaScript中的高级选择器
 + 学习JavaScript中的数组对象遍历、读写、排序等操作
 + 学习简单的字符串处理操作
 
-###任务描述
+### 任务描述
   
 * 参考以下示例代码，读取页面上已有的source列表，从中提取出城市以及对应的空气质量
 * 将数据按照某种顺序排序后，在resort列表中按照顺序显示出来
@@ -100,7 +100,7 @@
 		</html>
 
 
-###任务注意事项
+### 任务注意事项
 
 * 实现简单功能的同时，请仔细学习JavaScript基本语法、事件、DOM相关的知识
 * 请注意代码风格的整齐、优雅
@@ -109,7 +109,7 @@
 * 示例代码仅为示例，可以直接使用，也可以完全自己重写
 
 
-###在线学习参考资料
+### 在线学习参考资料
 
 * [Javascript入门篇](http://www.imooc.com/view/36)
 * [MDN JavaScript](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript)
