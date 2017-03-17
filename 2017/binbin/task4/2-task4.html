@@ -45,7 +45,10 @@
 			}
 			.box:hover {
 			    cursor: pointer;
-			    border: 1px #fff solid;
+			}
+			.box:active {
+			    cursor: pointer;
+			    background-color: #a44;
 			}
 		</style>
 	</head>
@@ -87,15 +90,15 @@
 				btn.onclick = function(){
 					switch(btnid){
 						case "leftIn": 
-						if(!/^(\d)+$/.test(input.value)){
-							alert("请输入数字");
+						if(!/^(\d){1,4}$/.test(input.value)){
+							alert("请输入4位以内的整数");
 							return false;
 						}else arr.unshift(input.value);
 						break;
 						
 						case "rightIn": 
-						if(!/^(\d)+$/.test(input.value)){
-							alert("请输入数字");
+						if(!/^(\d){1,4}$/.test(input.value)){
+							alert("请输入4位以内的整数");
 							return false;
 						}else arr.push(input.value);
 						break;
