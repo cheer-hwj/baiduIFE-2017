@@ -1,6 +1,6 @@
 # my-baiduIFE
 
-## 2017
+## 2017-Demo演示
 ----------------------------------
 **小薇学院**
 * [task1]( 2017/xiaowei/task1/task1.html )
@@ -10,6 +10,7 @@
 * [task5]( 2017/xiaowei/task5/task5.html )
 * [task6]( 2017/xiaowei/task6/task6.html )
 * [task7]( 2017/xiaowei/task7/1-task7.html )
+* [task8]( 2017/xiaowei/task8/1-task8.html )
 
 **斌斌学院**
 * [task1]( 2017/binbin/task1/2-task1.html )
