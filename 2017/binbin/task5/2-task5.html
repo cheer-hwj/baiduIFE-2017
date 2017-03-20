@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>可视化排序算法</title>
+		<meta charset="utf-8">
+		<style>
+			* {
+			    margin: 0;
+			    padding: 0;
+			}
+			.main {
+			    margin: 100px;
+			    text-align: left;
+			}
+			.main input {
+			    width: 100px;
+			    height: 40px;
+			    text-indent: 10px;
+			}
+			button {
+			    margin: 0 10px;
+			    padding: 5px 15px;
+			    border: none;
+			    color: #fff;
+			    background-color: #4aa;
+			    border-radius: 5px;
+			}
+			button:hover {
+			    background-color: #488;
+			}
+			.in,
+			.out {
+			    display: inline-block;
+			    margin: 20px;
+			}
+			.box {
+			    display: inline-block;
+			    margin: 5px;
+			    width: 30px;
+			    text-align: center;
+				vertical-align:bottom;
+			    line-height: 30px;
+			    background-color: #d88;
+			    color: #fff;
+			}
+			.box:hover {
+			    cursor: pointer;
+			}
+			.box:active {
+			    cursor: pointer;
+			    background-color: #a44;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="main">
+			<input type="text" id="input">
+			<div class="in">
+				<button id="leftIn">左侧入</button>
+				<button id="rightIn">右侧入</button>
+			</div>
+			<div class="out">
+				<button id="leftOut">左侧出</button>
+				<button id="rightOut">右侧出</button>
+			</div>
+			<div id="display">	
+			</div>
+		</div>
+		<script>
+			var arr = [];
+			function createBox(arr){
+				var display = document.getElementById("display");
+				while(display.firstChild){
+					display.removeChild(display.firstChild);
+				}
+				for(var i = 0; i < arr.length; i++){
+					var newone = document.createElement("p");
+					var newone_text = document.createTextNode(arr[i]);
+					newone.appendChild(newone_text);
+					newone.className = "box";
+					newone.style.height = arr[i]*3 + "px";
+					newone.setAttribute("id",i);
+					display.appendChild(newone);
+					
+					newone.onclick = function(){
+						display.removeChild(this);
+						arr.splice(this.id,1);
+					}
+				}
+			}
+			
+			function mainfunc(btnid){
+				var btn = document.getElementById(btnid);
+				var input = document.getElementById("input");
+				
+				btn.onclick = function(){
+					
+					var num = input.value;
+					arr.sort(function(a,b){return a - b;});
+					createBox(arr);
+					switch(btnid){
+						case "leftIn": 
+						if(arr.length == 60){
+							alert("超过队列最大长度!");
+						}
+						else if(!(num >= 10 && num <= 100)){
+							alert("请输入10到100之间的数");
+							return false;
+						}else {
+							arr.unshift(num);
+							createBox(arr);
+							bubbleSort(num);
+						}
+						break;
+						
+						case "rightIn": 
+						if(arr.length == 60){
+							alert("超过队列最大长度!");
+						}
+						else if(!(num >= 10 && num <= 100)){
+							alert("请输入10到100之间的数");
+							return false;
+						}else {
+							arr.push(input.value);
+							createBox(arr);
+							bubbleSort_right(num);
+						}
+						break;
+						
+						case "leftOut": 
+						if(arr.length == 0){
+							alert("队列为空");
+							return false;
+						}else arr.shift();
+						break;
+						
+						case "rightOut": 
+						if(arr.length == 0){
+							alert("队列为空");
+							return false;
+						}else arr.pop();
+						break;
+						default: return false;	
+					}
+				}	
+			}
+			function bubbleSort(num){
+				var n = arr.indexOf(num);
+				var val = document.getElementById(n);
+				if(val.movement){
+					clearTimeout(val.movement);
+				}
+				if(arr[n] - arr[n+1] <= 0){
+					return true;
+				}
+				if(arr[n] - arr[n+1] > 0){
+					var temp = arr[n+1];
+					arr[n+1] = arr[n];
+					arr[n] = temp;
+				}
+				createBox(arr);
+				var repeat = "bubbleSort('"+ num + "')";
+				val.movement = setTimeout(repeat, 400);
+			}
+			function bubbleSort_right(num){
+				var n = arr.lastIndexOf(num);
+				var val = document.getElementById(n);
+				if(val.movement){
+					clearTimeout(val.movement);
+				}
+				if(arr[n] - arr[n-1] >= 0){
+					return true;
+				}
+				if(arr[n] - arr[n-1] < 0){
+					var temp = arr[n-1];
+					arr[n-1] = arr[n];
+					arr[n] = temp;
+				}
+				createBox(arr);
+				var repeat = "bubbleSort_right('"+ num + "')";
+				val.movement = setTimeout(repeat, 400);
+			}
+			window.onload = function(){
+				mainfunc("leftIn");
+				mainfunc("rightIn");
+				mainfunc("leftOut");
+				mainfunc("rightOut");
+			}				
+		</script>
+	</body>
+</html>
