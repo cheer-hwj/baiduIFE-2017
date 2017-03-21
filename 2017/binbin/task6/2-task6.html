@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh">
     <head>
-        <title>可视化排序算法</title>
+        <title>对列混合输入及查询</title>
         <meta charset="utf-8">
         <style>
             * {
@@ -13,7 +13,8 @@
                 text-align: left;
             }
             .main input {
-                width: 100px;
+                margin: 20px 0;
+                width: 200px;
                 height: 40px;
                 text-indent: 10px;
             }
@@ -28,6 +29,12 @@
             button:hover {
                 background-color: #488;
             }
+            textarea {
+                padding: 10px;
+                height: 100px;
+                width: 400px;
+                font-family: "Microsoft YaHei";
+            }
             .in,
             .out {
                 display: inline-block;
@@ -36,10 +43,10 @@
             .box {
                 display: inline-block;
                 margin: 5px;
-                width: 30px;
+                padding: 0 10px;
+                height: 50px;
                 text-align: center;
-                vertical-align:bottom;
-                line-height: 30px;
+                line-height: 50px;
                 background-color: #d88;
                 color: #fff;
             }
@@ -54,7 +61,9 @@
     </head>
     <body>
         <div class="main">
-            <input type="text" id="input">
+            
+            <textarea id="input" placeholder="请输入需要加入队列的内容"></textarea>
+            
             <div class="in">
                 <button id="leftIn">左侧入</button>
                 <button id="rightIn">右侧入</button>
@@ -64,6 +73,13 @@
                 <button id="rightOut">右侧出</button>
             </div>
             <div id="display">    
+            </div>
+            <div>
+                <input type="text" id="search"  placeholder="请输入查询字段">
+                <button id="btnSearch">查询</button>
+                
+                <button id="clearInput">清空输入</button>
+                <button id="clearQueue">清空队列</button>
             </div>
         </div>
         <script>
@@ -78,7 +94,6 @@
                     var newone_text = document.createTextNode(arr[i]);
                     newone.appendChild(newone_text);
                     newone.className = "box";
-                    newone.style.height = arr[i]*3 + "px";
                     newone.setAttribute("id",i);
                     display.appendChild(newone);
                     
@@ -94,36 +109,24 @@
                 var input = document.getElementById("input");
                 
                 btn.onclick = function(){
-                    
-                    var num = input.value;
-                    arr.sort(function(a,b){return a - b;});
-                    createBox(arr);
                     switch(btnid){
                         case "leftIn": 
-                        if(arr.length == 60){
-                            alert("超过队列最大长度!");
-                        }
-                        else if(!(num >= 10 && num <= 100)){
-                            alert("请输入10到100之间的数");
+                        if(/^[\s,，]*$/.test(input.value)){
+                            alert("请输入有效内容");
                             return false;
                         }else {
-                            arr.unshift(num);
-                            createBox(arr);
-                            bubbleSort(num);
+                            var arr2 = deal(input);
+                            arr = arr2.concat(arr);
                         }
                         break;
                         
-                        case "rightIn": 
-                        if(arr.length == 60){
-                            alert("超过队列最大长度!");
-                        }
-                        else if(!(num >= 10 && num <= 100)){
-                            alert("请输入10到100之间的数");
+                        case "rightIn":
+                        if(/^[\s,，]*$/.test(input.value)){
+                            alert("请输入有效内容");
                             return false;
                         }else {
-                            arr.push(input.value);
-                            createBox(arr);
-                            bubbleSort_right(num);
+                            var arr2 = deal(input);
+                            arr = arr.concat(arr2);
                         }
                         break;
                         
@@ -142,49 +145,64 @@
                         break;
                         default: return false;    
                     }
+                    createBox(arr);
                 }    
             }
-            function bubbleSort(num){
-                var n = arr.indexOf(num);
-                var val = document.getElementById(n);
-                if(val.movement){
-                    clearTimeout(val.movement);
-                }
-                if(arr[n] - arr[n+1] <= 0){
-                    return true;
-                }
-                if(arr[n] - arr[n+1] > 0){
-                    var temp = arr[n+1];
-                    arr[n+1] = arr[n];
-                    arr[n] = temp;
-                }
-                createBox(arr);
-                var repeat = "bubbleSort('"+ num + "')";
-                val.movement = setTimeout(repeat, 400);
+            function deal(text){
+                var content = text.value;
+                return content.replace(/^[\s,，]*|[\s,，]*$/g,"").split(/[\s,，]+/);
             }
-            function bubbleSort_right(num){
-                var n = arr.lastIndexOf(num);
-                var val = document.getElementById(n);
-                if(val.movement){
-                    clearTimeout(val.movement);
+            function search(){
+                var btnSearch = document.getElementById("btnSearch");
+                var target = document.getElementById("search");
+                btnSearch.onclick = function(){
+                    var targetContent = target.value.replace(/[\s,，]*/g,"");
+                    if(targetContent == ""){alert("请输入查询字段");}
+                    else{
+                        var countArr = arr.map(function(val,index){
+                            if(val.indexOf(targetContent) != -1){
+                                return index;
+                            }else return false;
+                        }).filter(function(val){return val !== false;});
+                        
+                        if(countArr.length == 0){alert("没有符合条件的查询结果");}
+                        else {
+                            createBox(arr);
+                            for(var i = 0; i < countArr.length; i++){
+                                var elem = document.getElementById(countArr[i]);
+                                elem.style.backgroundColor = "#668";
+                                elem.style.fontWeight = "bold";
+                            }
+                        }
+                    }
                 }
-                if(arr[n] - arr[n-1] >= 0){
-                    return true;
+            }
+            function clear(){
+                var clearInput = document.getElementById("clearInput");
+                var clearQueue = document.getElementById("clearQueue");
+                clearInput.onclick = function(){
+                    var input = document.getElementById("input");
+                    input.value = "";
                 }
-                if(arr[n] - arr[n-1] < 0){
-                    var temp = arr[n-1];
-                    arr[n-1] = arr[n];
-                    arr[n] = temp;
+                clearQueue.onclick = function(){
+                    var search = document.getElementById("search");
+                    search.value = "";
+                    arr = [];
+                    var display = document.getElementById("display");
+                    while(display.firstChild){
+                        display.removeChild(display.firstChild);
+                    }
                 }
-                createBox(arr);
-                var repeat = "bubbleSort_right('"+ num + "')";
-                val.movement = setTimeout(repeat, 400);
+            
+            
             }
             window.onload = function(){
                 mainfunc("leftIn");
                 mainfunc("rightIn");
                 mainfunc("leftOut");
                 mainfunc("rightOut");
+                search();
+                clear();
             }                
         </script>
     </body>
