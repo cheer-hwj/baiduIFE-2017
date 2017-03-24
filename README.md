@@ -11,6 +11,7 @@
 * [task6]( 2017/xiaowei/task6/task6.html )
 * [task7]( 2017/xiaowei/task7/1-task7.html )
 * [task8]( 2017/xiaowei/task8/1-task8.html )
+* [task9]( 2017/xiaowei/task8/1-task9.html )
 
 **斌斌学院**
 * [task1]( 2017/binbin/task1/2-task1.html )
