@@ -61,13 +61,14 @@ nav {
 }
 .btn-login {
     height: 56px;
+    background-color: transparent;
     background-image: url(images/login.png);
     background-position: left center;
     background-repeat: no-repeat;
 }
 .btn-login:hover {
     color: #e2cd47;
-    background-color: #2289bf;
+    background-color: transparent;
     background-image: url(images/login-hover.png);
 }
 .nav-right {
