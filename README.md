@@ -21,6 +21,7 @@
 * [task4]( 2017/binbin/task4/2-task4.html )
 * [task5]( 2017/binbin/task5/2-task5.html )
 * [task6]( 2017/binbin/task6/2-task6.html )
+* [task7]( 2017/binbin/task7/2-task7.html )
 
 **耀耀学院**
 * [task1]( 2017/yaoyao/task1/3-task1.html )
