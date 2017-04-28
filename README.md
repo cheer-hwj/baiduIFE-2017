@@ -26,4 +26,4 @@
 **耀耀学院**
 * [task1]( 2017/yaoyao/task1/3-task1.html )
 * [task2]( 2017/yaoyao/task2/3-task2.html )
-* [task3]( 2017/yaoyao/task2/3-task3.html )
+* [task3]( 2017/yaoyao/task3/3-task3.html )
