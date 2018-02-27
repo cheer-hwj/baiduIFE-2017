@@ -27,3 +27,7 @@
 * [task1]( 2017/yaoyao/task1/3-task1.html )
 * [task2]( 2017/yaoyao/task2/3-task2.html )
 * [task3]( 2017/yaoyao/task3/3-task3.html )
+* [task4]( 2017/yaoyao/task4/3-task4.html )
+* [task5]( 2017/yaoyao/task5/3-task5.html )
+* [task6]( 2017/yaoyao/task6/3-task6.html )
+* [task7]( 2017/yaoyao/task7/3-task7.html )
