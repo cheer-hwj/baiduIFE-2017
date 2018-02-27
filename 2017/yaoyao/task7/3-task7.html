@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>UI视图排表格</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                outline: 0;
+            }
+            table {
+                margin: 200px auto;
+                border-collapse: collapse;
+            }
+            thead {
+                background: rgba(0, 0, 0, 0.2);
+                cursor: default;
+            }
+            td,th {
+                border: 1px solid #555;
+                padding: 10px 40px;
+            }
+            th.clickable:hover {
+                background: rgba(255,255,255,0.2);
+                cursor: pointer;
+            }
+            button {
+                display: block;
+                margin: 20px auto;
+                padding: 10px 20px;
+            }
+            .addnew {
+                text-align: center;
+            }
+            .addnew input {
+                margin-right: 30px;
+                width: 100px;
+                height: 30px;
+                line-height: 30px;
+                text-indent: 10px;
+            }
+        </style>
+    </head>
+    <body>
+        <table>
+            <thead>
+                <tr>
+                    <th>姓名</th>
+                    <th class="clickable">语文</th>
+                    <th class="clickable">数学</th>
+                    <th class="clickable">英语</th>
+                    <th class="clickable">总分</th>
+                </tr>
+            </thead>
+            <tbody id="score">
+            </tbody>
+        </table>
+        <form class="addnew">
+            <label>姓名：</label><input required id="name">
+            <label>语文：</label><input type="number" min="0" max="150" required id="chinese">
+            <label>数学：</label><input type="number" min="0" max="150" required id="math">
+            <label>英语：</label><input type="number" min="0" max="150" required id="english">
+            <button type="submit">添加</button>
+        </form>
+        <script>
+            var tbody = document.querySelector("#score")
+
+            function AddScore(arr) {
+                var o = {
+                }
+
+                o.score = function() {
+                    var s = {}
+                    var l = arr.length
+                    for(var i = 0; i < l; i++) {
+                        s[arr[i]] = document.querySelector('#' + arr[i]).value
+                    }
+                    s.sum = parseInt(0)
+                    for(var i = 1; i < l; i++) {
+                        s.sum += parseInt(s[arr[i]])
+                    }
+                    return s
+                }
+                o.prem = function () {
+                    var arr = []
+                    for(var key in o.score()) {
+                        arr.push(key)
+                    }
+                    return arr
+                }
+                o.update = function () {
+                    var score = JSON.stringify(o.score());
+                    var local = localStorage.getItem('new')
+                    if(local) {
+                        var arr = local.split(';')
+                        arr.push(score)
+                    }
+                    else {
+                        arr = [score]
+                    }
+                    localStorage.setItem('new', arr.join(';'))
+                    o.init('chinese', 0)
+                }
+                o.init = function (keyValue, type) {
+                    var local = localStorage.getItem('new')
+                    if(local) {
+                        if(tbody.querySelectorAll('tr').length > 0) {
+                            tbody.innerHTML = ''
+                        }
+                        var oldarr = local.split(';').map(val => JSON.parse(val))
+                        var arr = o.order(keyValue, type, oldarr)
+                        var l = arr.length
+                        for(var n = 0; n < l; n++) {
+                            var score = arr[n]
+                            var tr = document.createElement('tr')
+                            for(var key in score) {
+                                var td = document.createElement('td')
+                                td.innerHTML = score[key]
+                                tr.appendChild(td)
+                            }
+                            tbody.appendChild(tr)
+                        } 
+                    }   
+                }
+                o.order = function (key, type, arr) {
+                    return arr.sort(function(a, b) {
+                        if(!type) {
+                            return parseInt(a[key]) > parseInt(b[key])
+                        }
+                        else {
+                            return parseInt(a[key]) < parseInt(b[key])
+                        }
+                    })
+                }
+                return o
+            }
+            var addScore = AddScore(['name', 'chinese', 'math', 'english'])
+            addScore.init('chinese', 0)
+            var form = document.querySelector('.addnew')
+            form.onsubmit = addScore.update
+
+            var table = document.querySelector('table')
+            var heads = table.querySelectorAll('th')
+            var len = heads.length
+            var prems = addScore.prem()
+            var tableW = window.getComputedStyle(table).width.replace('px', '')
+            for(let k = 1; k < len; k++) {
+                heads[k].onclick = function() {
+                    if(!heads[k].order) {
+                        heads[k].order = true
+                        table.style.background = "url(up.png) no-repeat " + (k + 0.75)/len*tableW + "px 15px"
+                    }
+                    else {
+                        heads[k].order = false
+                        table.style.background = "url(down.png) no-repeat " + (k + 0.75)/len*tableW + "px 15px"
+                    }
+                    addScore.init(prems[k], heads[k].order)
+                    
+                }
+            }
+        </script>
+    </body>
+</html>
