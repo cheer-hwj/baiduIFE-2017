@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>block</title>
+        <style>
+            * {
+                padding: 0;
+            }
+            .board {
+                position: relative;
+            }
+            table {
+                border-collapse: collapse;
+                box-sizing: border-box;
+            }
+            td {
+                border: solid 1px #000;
+                box-sizing: border-box;
+            }
+            .block {
+                position: absolute;
+                box-sizing: border-box;
+                background: #da5454;
+                border-top: #50bcc7 10px solid;
+                transition: 1s;
+            }
+            .change-deg {
+                transition: transform .5s, left .5s .5s, right .5s .5s, top .5s .5s, bottom .5s .5s;
+            }
+            .for-order {
+                margin: 20px 50px;
+            }
+            #order {
+                width: 200px;
+                height: 40px;
+            }
+            #goOrder {
+                padding: 10px 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="board">
+        </div>
+        <div class="for-order">
+            <select id="order">
+                <option>TRA LEF</option>
+                <option>TRA TOP</option>
+                <option>TRA RIG</option>
+                <option>TRA BOT</option>
+                <option>MOV LEF</option>
+                <option>MOV TOP</option>
+                <option>MOV RIG</option>
+                <option>MOV BOT</option>
+            </select>
+            <button id="goOrder">GO</button>
+        </div>
+        <script>
+            function createBoard(xCount, yCount, size) {
+                var board = document.querySelector(".board")
+                var table = document.createElement("table")
+
+                for(var i = 0; i < yCount + 1; i++) {
+                    var tr = document.createElement("tr")
+                    var yAxis = document.createElement("th")
+                    yAxis.innerHTML = i
+                    yAxis.style.width = size + 'px'
+                    yAxis.style.height = size + 'px'
+                    tr.appendChild(yAxis)
+
+                    for(var j = 0; j < xCount; j++) {
+                        if(i === 0) {
+                            var xAxis = document.createElement("th")
+                            xAxis.innerHTML = j + 1
+                            xAxis.style.width = size + 'px'
+                            xAxis.style.height = size + 'px'
+                            tr.appendChild(xAxis)
+                        }
+                        else {
+                            var td = document.createElement("td")
+                            td.style.width = size + 'px'
+                            td.style.height = size + 'px'
+                            tr.appendChild(td)
+                        }
+                    }
+                    table.appendChild(tr)
+                }
+
+                table.style.width = (xCount + 1) * size + 'px'
+                table.style.height = (yCount + 1) * size + 'px'
+                board.appendChild(table)
+            }
+            function Block (x, y, size, xCount, yCount) {
+                var board = document.querySelector(".board")
+                var b = document.createElement("div")
+                b.className = "block"
+                b.style.width = size + 'px'
+                b.style.height = size + 'px'
+                b.style.left = x * size + 'px'
+                b.style.top = y * size+ 'px'
+                board.appendChild(b)
+                var o = {
+                    x: x,
+                    y: y,
+                    size: size,
+                    el: b,
+                    direc : '0deg',
+                }
+                o.move = function (direction) {
+                    switch(direction) {
+                        case 'left': if(o.x > 1) { o.x--}
+                        break
+                        case 'right': if(o.x < xCount) {o.x++}
+                        break
+                        case 'top': if(o.y > 1) { o.y--}
+                        break
+                        case 'bottom': if(o.y < yCount) {o.y++}
+                        break
+                        default: return
+                    }
+                    o.el.style.left = o.x * o.size + 'px'
+                    o.el.style.top = o.y * o.size+ 'px'
+                }
+                o.turn = function (direction) {
+                    switch(direction) {
+                        case 'left': if(o.direc != '270deg')
+                                        {
+                                            o.direc = '270deg'
+                                            o.el.className = "block change-deg"
+                                        }
+                                     else {o.el.className = "block"}
+                                     if(o.x > 1) { o.x--}
+                        break
+                        case 'right': if(o.direc != '90deg')
+                                        {
+                                            o.direc = '90deg'
+                                            o.el.className = "block change-deg"
+                                        }
+                                      else {o.el.className = "block"}
+                                      if(o.x < xCount) {o.x++}
+                        break
+                        case 'top': if(o.direc != '0deg')
+                                        {
+                                            o.direc = '0deg'
+                                            o.el.className = "block change-deg"
+                                        }
+                                    else {o.el.className = "block"}
+                                    if(o.y > 1) { o.y--}
+                        break
+                        case 'bottom': if(o.direc != '180deg')
+                                        {
+                                            o.direc = '180deg'
+                                            o.el.className = "block change-deg"
+                                        }
+                                       else {o.el.className = "block"}
+                                       if(o.y < yCount) {o.y++}
+                        break
+                        default: return
+                    }
+                    o.el.style.transform = 'rotate(' + o.direc + ')'
+                    o.el.style.left = o.x * o.size + 'px'
+                    o.el.style.top = o.y * o.size+ 'px'
+                }
+                return o
+            }
+            (function() {
+                createBoard(11, 11, 50)
+                var block = Block(1, 1, 50, 11, 11)
+                var select = document.querySelector("#order")
+                var goBtn = document.querySelector("#goOrder")
+                goBtn.onclick = function () {
+                    switch(select.value) {
+                        case 'TRA LEF': block.move('left')
+                        break
+                        case 'TRA TOP': block.move('top')
+                        break
+                        case 'TRA RIG': block.move('right')
+                        break
+                        case 'TRA BOT': block.move('bottom')
+                        break 
+                        case 'MOV LEF': block.turn('left')
+                        break
+                        case 'MOV TOP': block.turn('top')
+                        break
+                        case 'MOV RIG': block.turn('right')
+                        break
+                        case 'MOV BOT': block.turn('bottom')
+                        break 
+                        default: return                       
+                    }
+                }
+            })()
+        </script>
+    </body>
+</html>
