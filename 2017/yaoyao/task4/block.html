@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>block</title>
+        <style>
+            * {
+                padding: 0;
+            }
+            .board {
+                position: relative;
+            }
+            table {
+                border-collapse: collapse;
+                box-sizing: border-box;
+            }
+            td {
+                border: solid 1px #000;
+                box-sizing: border-box;
+            }
+            .block {
+                position: absolute;
+                box-sizing: border-box;
+                background: #da5454;
+                border-top: #50bcc7 10px solid;
+                transition: 1s;
+            }
+            .for-order {
+                margin: 20px 50px;
+            }
+            #order {
+                width: 200px;
+                height: 40px;
+            }
+            #goOrder {
+                padding: 10px 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="board">
+        </div>
+        <div class="for-order">
+            <select id="order">
+                <option>GO</option>
+                <option>TUN LEF</option>
+                <option>TUN RIG</option>
+                <option>TUN BAC</option>
+            </select>
+            <button id="goOrder">GO</button>
+        </div>
+        <script>
+            function createBoard(xCount, yCount, size) {
+                var board = document.querySelector(".board")
+                var table = document.createElement("table")
+
+                for(var i = 0; i < yCount + 1; i++) {
+                    var tr = document.createElement("tr")
+                    var yAxis = document.createElement("th")
+                    yAxis.innerHTML = i
+                    yAxis.style.width = size + 'px'
+                    yAxis.style.height = size + 'px'
+                    tr.appendChild(yAxis)
+
+                    for(var j = 0; j < xCount; j++) {
+                        if(i === 0) {
+                            var xAxis = document.createElement("th")
+                            xAxis.innerHTML = j + 1
+                            xAxis.style.width = size + 'px'
+                            xAxis.style.height = size + 'px'
+                            tr.appendChild(xAxis)
+                        }
+                        else {
+                            var td = document.createElement("td")
+                            td.style.width = size + 'px'
+                            td.style.height = size + 'px'
+                            tr.appendChild(td)
+                        }
+                    }
+                    table.appendChild(tr)
+                }
+
+                table.style.width = (xCount + 1) * size + 'px'
+                table.style.height = (yCount + 1) * size + 'px'
+                board.appendChild(table)
+            }
+            function Block (x, y, size, xCount, yCount) {
+                var board = document.querySelector(".board")
+                var b = document.createElement("div")
+                b.className = "block"
+                b.style.width = size + 'px'
+                b.style.height = size + 'px'
+                b.style.left = x * size + 'px'
+                b.style.top = y * size+ 'px'
+                board.appendChild(b)
+                var o = {
+                    x: x,
+                    y: y,
+                    size: size,
+                    el: b,
+                    direc : '0deg',
+                }
+                o.go = function () {
+                    var direction = o.direc
+                    switch(direction) {
+                        case '270deg': if(o.x > 1) {o.x--}
+                        break
+                        case '90deg': if(o.x < xCount) {o.x++}
+                        break
+                        case '0deg': if(o.y > 1) { o.y--}
+                        break
+                        case '180deg': if(o.y < yCount) {o.y++}
+                        break
+                        default: return
+                    }
+                    o.el.style.left = o.x * o.size + 'px'
+                    o.el.style.top = o.y * o.size+ 'px'
+                }
+                o.turn = function (direction) {
+                    o.deg = parseInt(o.direc.replace('deg', ''))
+                    switch(direction) {
+                        case 'left': if(o.deg != 0)
+                                        { o.direc = (o.deg - 90) + 'deg' }
+                                     else {o.direc = '270deg'}
+                        break
+                        case 'right': if(o.deg != 270)
+                                        { o.direc = (o.deg + 90) + 'deg' }
+                                      else {o.direc = '0deg'}
+                        break
+                        case 'bac': if(o.deg > 90)
+                                        { o.direc = (o.deg - 180) + 'deg' }
+                                    else { o.direc = (o.deg + 180) + 'deg' }
+                        break
+                        default: return
+                    }
+                    o.el.style.transform = 'rotate(' + o.direc + ')'
+                }
+                return o
+            }
+            (function() {
+                createBoard(11, 11, 50)
+                var block = Block(1, 1, 50, 11, 11)
+                var select = document.querySelector("#order")
+                var goBtn = document.querySelector("#goOrder")
+                goBtn.onclick = function () {
+                    switch(select.value) {
+                        case 'GO': block.go()
+                        break
+                        case 'TUN LEF': block.turn('left')
+                        break
+                        case 'TUN RIG': block.turn('right')
+                        break
+                        case 'TUN BAC': block.turn('bac')
+                        break 
+                        default: return                       
+                    }
+                }
+            })()
+        </script>
+    </body>
+</html>
