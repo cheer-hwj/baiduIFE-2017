@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title> UI浮出 </title>
+        <style type="text/css">
+            * {
+                margin: 0;
+                padding: 0;
+                outline: 0;
+            }
+            .content {
+                height: 1600px;
+                background: url('test.png');
+            }
+            #layer { 
+                display: none;
+            }
+            .cover{
+                position: fixed;
+                left: 0;
+                right: 0;
+                top: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.5);
+            }
+            .popup {
+                position: fixed;
+                box-sizing: border-box;
+                padding: 20px;
+                text-align: center;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                background: #fff;
+                resize: both;
+                overflow: hidden;
+                user-select: none;
+            }
+            button {
+                margin: 50px 20px 20px 20px;
+                padding: 10px 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="content">
+            <button id="clickthis">Click This</button>
+        </div>
+        <div id="layer">
+            <div class="cover"></div>
+            <div class="popup">
+                <h3 id="h3">这是一个浮出层</h3>
+                <p>这是一个浮出层</p>
+                <div>
+                    <button id="confirm">确认</button>
+                    <button id="cancel">取消</button>
+                </div>
+            </div>
+        </div>
+        <script>                
+            (function () {
+                function Popup() {
+                    var el = document.querySelector(".popup")
+                    var head = document.querySelector("#h3")
+                    var p = {
+                        flag: false,
+                        el: el,
+                        head: head,
+                        actions: {
+                            'mousedown': function () {
+                                p.flag = true
+                                p.init(event)
+                            },
+                            'mousemove': function () {
+                                if(p.flag) {
+                                    p.update(event)
+                                }
+                            },
+                            'mouseup': function () {
+                                p.flag = false
+                                p.el.style.cursor = 'default'
+                            },
+                            'click': function (str) {
+                                var layer = document.querySelector('#layer')
+                                switch(str) {
+                                    case 'close': layer.style.display = 'none'
+                                    document.body.style.overflow = 'auto'
+                                    break
+                                    case 'open': layer.style.display = 'block'
+                                    document.body.style.overflow = 'hidden'
+                                    break
+                                    default: return
+                                }
+                            }
+                        }
+                    }
+                    p.getx = function () {
+                        return parseInt(window.getComputedStyle(p.el).left.replace('px',''))
+                    }
+                    p.gety = function () {
+                        return parseInt(window.getComputedStyle(p.el).top.replace('px',''))
+                    }
+                    p.getWidth = function () {
+                        return parseInt(window.getComputedStyle(p.el).width.replace('px',''))
+                    }
+                    p.getHeight = function () {
+                        return parseInt(window.getComputedStyle(p.el).height.replace('px',''))
+                    }
+                    p.init = function (event) {
+                        p.x = p.getx()
+                        p.y = p.gety()
+                        p.w = p.getWidth()
+                        p.h = p.getHeight()
+                        p.mousex = event.clientX
+                        p.mousey = event.clientY
+
+                        //为方便调整弹框大小，如果按下的是弹框的右下角，禁止移动
+                        /* 另一种简单的方法是只监听标题部分 */
+                        if((p.mousex > p.x + (p.w/2-40)) && (p.mousey > p.y + (p.h/2-40))) {
+                            p.flag = false
+                        }
+                    }
+                    p.update = function (event) {
+                        p.el.style.cursor = 'move'
+                        var newx = event.clientX
+                        var insx = newx - p.mousex
+                        p.mousex = newx
+                        p.x = p.x + insx
+
+                        var newy = event.clientY
+                        var insy = newy - p.mousey
+                        p.mousey = newy
+                        p.y = p.y + insy
+                        p.el.style.left = p.x + 'px'
+                        p.el.style.top = p.y + 'px'
+                    }
+                    return p
+                }
+                function addListener(el, name, o, str) {
+                    if(typeof el == 'string') {
+                        var el = document.querySelector(el)
+                    }
+                    el.addEventListener(name, function () {
+                        o.actions[name](str)
+                    })
+                }
+                var popup = Popup()
+                //添加监听事件
+                addListener('#clickthis', 'click', popup, 'open')
+                addListener('#cancel', 'click', popup, 'close')
+                addListener('.cover', 'click', popup, 'close')
+
+                addListener(popup.el, 'mousedown', popup)
+                addListener(popup.el, 'mousemove', popup)
+                addListener(window, 'mouseup', popup)
+            })()
+        </script>
+    </body>
+</html>
